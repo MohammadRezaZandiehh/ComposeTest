@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.composetest.ui.theme.ComposeTestTheme
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeTestTheme {
                 Surface {
-                    Row(
+/*                    Row(
                         modifier = Modifier
                             .fillMaxSize(),
                         horizontalArrangement = Arrangement.Center,
@@ -40,11 +41,25 @@ class MainActivity : ComponentActivity() {
                         ) {
                             TimerButton("start / reset 2")
                         }
+                    }*/
+
+
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Timer(time = 100)
+                        Timer(time = 100)
                     }
+
+
                 }
             }
         }
     }
+
+    //first way:
 
     @Composable
     fun TimerButton(
@@ -86,4 +101,52 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
+
+
+//another way:
+
+    @Composable
+    fun Timer(time: Int, startValue: Float = 0f) {
+
+        var timeValue by remember {
+            mutableStateOf(startValue)
+        }
+
+        var currentTime by remember {
+            mutableStateOf(startValue)
+        }
+
+        var isTimerRunning by remember {
+            mutableStateOf(false)
+        }
+
+        LaunchedEffect(key1 = currentTime, key2 = isTimerRunning) {
+            if (/*currentTime > 0 &&*/ isTimerRunning) {
+                delay(50)
+                currentTime += 100
+                timeValue = currentTime / time.toFloat()
+            }
+        }
+
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = (currentTime / 1000L).toString(),
+                fontSize = 32.sp
+            )
+
+            Button(
+                onClick = {
+                    if (currentTime <= 0L) {
+                        currentTime = time.toFloat()
+                        isTimerRunning = true
+                    }
+                }
+            ) {
+                Text(text = "Start to Count")
+            }
+        }
+
+
+
+
+}}
