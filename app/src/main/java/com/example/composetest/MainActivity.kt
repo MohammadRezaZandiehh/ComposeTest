@@ -1,6 +1,5 @@
 package com.example.composetest
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -31,8 +30,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -688,9 +685,6 @@ class MainActivity : ComponentActivity() {
                     .align(Alignment.TopCenter)
             ) {
 
-//                    val canvasWidth = 190
-//                    val canvasHeight = 130
-
                 var arcRadius = size.toPx()
 
                 arcRadius -= gapBetweenCircles.toPx()
@@ -699,7 +693,6 @@ class MainActivity : ComponentActivity() {
                     color = backgroundCircleColor,
                     radius = arcRadius / 2,
                     style = Stroke(width = thickness.toPx(), cap = StrokeCap.Butt),
-//                        center = Offset(x = size1.toFloat() / 2, y = canvasHeight.toFloat() / 2),
                 )
 
                 drawArc(
