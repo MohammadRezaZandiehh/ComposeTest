@@ -1,10 +1,12 @@
 package com.example.composetest
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,15 +21,23 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composetest.ui.theme.*
@@ -36,7 +46,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-//            CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
 
             ComposeTestTheme {
                 Surface {
@@ -102,6 +111,8 @@ class MainActivity : ComponentActivity() {
                                                     R.drawable.ic_arrow_left
                                                 )
 
+                                                Chart()
+
                                                 UserPackage(
                                                     R.drawable.people,
                                                     text = "خرید بسته چند کاربره"
@@ -129,8 +140,6 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 }
-
-
 
 
                                 Spacer(modifier = Modifier.height(8.dp))
@@ -352,7 +361,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Text(
                         modifier = Modifier
-                            .background(Color.Green)
+                            .background(Green)
                             .padding(horizontal = 20.dp, vertical = 4.dp),
                         text = "مدیریت جیب جت"
                     )
@@ -650,6 +659,102 @@ class MainActivity : ComponentActivity() {
                     .size(16.dp),
                 painter = painterResource(image),
                 contentDescription = ""
+            )
+        }
+    }
+
+
+    @Preview
+    @Composable
+    fun Chart(
+        values: Float = 120f,
+        colors: Color = Green,
+        backgroundCircleColor: Color = Color.LightGray.copy(alpha = 0.2f),
+        size: Dp = 100.dp,
+        thickness: Dp = 6.dp,
+        gapBetweenCircles: Dp = 42.dp
+    ) {
+
+        // Convert each value to angle
+        val sweepAngles = values.compareTo(360 * 120 / 100).toFloat()
+
+        Box(
+            contentAlignment = Alignment.TopCenter,
+        ) {
+
+            Canvas(
+                modifier = Modifier
+                    .size(size)
+                    .align(Alignment.TopCenter)
+            ) {
+
+//                    val canvasWidth = 190
+//                    val canvasHeight = 130
+
+                var arcRadius = size.toPx()
+
+                arcRadius -= gapBetweenCircles.toPx()
+
+                drawCircle(
+                    color = backgroundCircleColor,
+                    radius = arcRadius / 2,
+                    style = Stroke(width = thickness.toPx(), cap = StrokeCap.Butt),
+//                        center = Offset(x = size1.toFloat() / 2, y = canvasHeight.toFloat() / 2),
+                )
+
+                drawArc(
+                    color = colors,
+                    startAngle = -90f,
+                    sweepAngle = 90f,
+                    useCenter = false,
+                    style = Stroke(width = thickness.toPx(), cap = StrokeCap.Round),
+                    size = Size(arcRadius, arcRadius),
+                    topLeft = Offset(
+                        x = (size.toPx() - arcRadius) / 2,
+                        y = (size.toPx() - arcRadius) / 2
+                    )
+                )
+            }
+
+            CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    textAlign = TextAlign.Center,
+                    text = "44.5 مگ",
+                    fontSize = (10.sp),
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+
+            Card(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                shape = RoundedCornerShape(10.dp),
+            ) {
+                Text(
+                    modifier = Modifier
+                        .background(Yellow)
+                        .padding(horizontal = 6.dp, vertical = 2.dp),
+                    fontSize = (10.sp),
+                    fontWeight = FontWeight.Bold,
+                    text = "خرید بسته اینترنت"
+                )
+            }
+        }
+    }
+
+
+    //    @Preview
+    @Composable
+    fun Test() {
+        Canvas(modifier = Modifier.size(100.dp)) {
+            val canvasWidth = size.width
+            val canvasHeight = size.height
+            drawCircle(
+                color = Color(0xff0f9d58),
+                center = Offset(x = canvasWidth / 2, y = canvasHeight / 3),
+                radius = size.minDimension / 3,
+                style = Stroke(10F)
             )
         }
     }
