@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import com.example.composetest.ui.theme.*
 
 class MainActivity : ComponentActivity() {
@@ -108,20 +109,24 @@ class MainActivity : ComponentActivity() {
                                                     R.drawable.ic_arrow_left
                                                 )
 
-                                                Chart()
-
-                                                UserPackage(
-                                                    R.drawable.people,
-                                                    text = "خرید بسته چند کاربره"
+                                                CustomCircularProgressIndicator(
+                                                    modifier = Modifier
+                                                        .size(80.dp)
+                                                        .background(Color.White),
+                                                    initialValue = 90,
+                                                    primaryColor = Green,
+                                                    secondaryColor = Color.LightGray,
+                                                    circleRadius = 90f,
+                                                    onPositionChange = {}
                                                 )
 
                                                 UserPackage(
-                                                    R.drawable.baseline_phone_callback_24,
+                                                    R.drawable.people,
                                                     text = "خرید بسته مکالمه"
                                                 )
 
                                                 UserPackage(
-                                                    R.drawable.percent,
+                                                    R.drawable.people,
                                                     text = "خرید بسته پیشنهادی"
                                                 )
 
@@ -163,7 +168,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    //    @Preview
     @Composable
     fun UserInfo() {
 
@@ -258,7 +262,6 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    //    @Preview
     @Composable
     fun EntireGeneral() {
         Card(
@@ -308,7 +311,7 @@ class MainActivity : ComponentActivity() {
 
                     Card(
                         modifier = Modifier
-                            .padding(start = 4.dp),
+                            .padding(start = 4.dp, end = 4.dp),
                         shape = RoundedCornerShape(10.dp),
                     ) {
                         Text(
@@ -323,7 +326,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    //    @Preview
     @Composable
     fun EntireBudget() {
         Card(
@@ -367,7 +369,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    //    @Preview
     @Composable
     fun UserPackage(
         @DrawableRes image: Int,
@@ -382,12 +383,12 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier
                     .padding(vertical = 6.dp)
                     .background(DarkYellow, shape = CircleShape)
-                    .size(50.dp)
+                    .size(60.dp)
             ) {
                 Image(
                     modifier = Modifier
-                        .padding(4.dp),
-                    /*.size(50.dp)*/
+                        .padding(4.dp)
+                        .align(Alignment.Center),
                     painter = painterResource(id = image),
                     contentScale = ContentScale.Fit,
                     contentDescription = "",
@@ -428,7 +429,7 @@ class MainActivity : ComponentActivity() {
                     .padding(end = 8.dp),
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
-                text = "ایرانسل را بازی کنید و جایزه ببرید"
+                text = "! ایرانسل را بازی کنید و جایزه ببرید"
             )
 
 
@@ -444,7 +445,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    //    @Preview
     @Composable
     fun RoundedIconBox(
         title: String,
@@ -535,7 +535,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    //    @Preview
     @Composable
     fun HotScreen() {
         val scrollState = rememberLazyListState()
@@ -548,7 +547,7 @@ class MainActivity : ComponentActivity() {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                        .padding(horizontal = 8.dp, vertical = 16.dp),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
                     RoundedIconBox(
@@ -640,7 +639,6 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    //    @Preview
     @Composable
     fun Flash(
         @DrawableRes image: Int,
@@ -661,7 +659,6 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    @Preview
     @Composable
     fun Chart(
         values: Float = 120f,
@@ -675,59 +672,166 @@ class MainActivity : ComponentActivity() {
         // Convert each value to angle
         val sweepAngles = values.compareTo(360 * 120 / 100).toFloat()
 
-        Box(
-            contentAlignment = Alignment.TopCenter,
+        Column(
+            modifier = Modifier/*.height(180.dp)*/
+                .background(Color.Yellow),
+            verticalArrangement = Arrangement.Top
         ) {
-
-            Canvas(
+            Box(
                 modifier = Modifier
-                    .size(size)
-                    .align(Alignment.TopCenter)
+                    .background(Color.Red)
+                    .height(90.dp),
+                contentAlignment = Alignment.TopCenter,
             ) {
 
-                var arcRadius = size.toPx()
-
-                arcRadius -= gapBetweenCircles.toPx()
-
-                drawCircle(
-                    color = backgroundCircleColor,
-                    radius = arcRadius / 2,
-                    style = Stroke(width = thickness.toPx(), cap = StrokeCap.Butt),
-                )
-
-                drawArc(
-                    color = colors,
-                    startAngle = -90f,
-                    sweepAngle = 90f,
-                    useCenter = false,
-                    style = Stroke(width = thickness.toPx(), cap = StrokeCap.Round),
-                    size = Size(arcRadius, arcRadius),
-                    topLeft = Offset(
-                        x = (size.toPx() - arcRadius) / 2,
-                        y = (size.toPx() - arcRadius) / 2
-                    )
-                )
-            }
-
-            CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
-                Text(
+                Canvas(
                     modifier = Modifier
-                        .align(Alignment.Center),
-                    textAlign = TextAlign.Center,
-                    text = "44.5 مگ",
-                    fontSize = (10.sp),
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
+                        .size(size)
+                        .align(Alignment.TopCenter)
+                ) {
 
+                    var arcRadius = size.toPx()
+
+                    arcRadius -= gapBetweenCircles.toPx()
+
+
+                    drawCircle(
+                        color = backgroundCircleColor,
+                        radius = arcRadius / 2,
+                        style = Stroke(width = thickness.toPx(), cap = StrokeCap.Butt),
+                    )
+
+                    drawArc(
+                        color = colors,
+                        startAngle = -90f,
+                        sweepAngle = 90f,
+                        useCenter = false,
+                        style = Stroke(width = thickness.toPx(), cap = StrokeCap.Round),
+                        size = Size(arcRadius, arcRadius),
+                        topLeft = Offset(
+                            x = (size.toPx() - arcRadius) / 2,
+                            y = (size.toPx() - arcRadius) / 2
+                        )
+                    )
+                }
+
+                CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        textAlign = TextAlign.Center,
+                        text = "44.5 مگ",
+                        fontSize = (10.sp),
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+            }
             Card(
-                modifier = Modifier.align(Alignment.BottomCenter),
                 shape = RoundedCornerShape(10.dp),
             ) {
                 Text(
                     modifier = Modifier
                         .background(Yellow)
-                        .padding(horizontal = 6.dp, vertical = 2.dp),
+                        .padding(horizontal = 6.dp, vertical = 6.dp),
+                    fontSize = (10.sp),
+                    fontWeight = FontWeight.Bold,
+                    text = "خرید بسته اینترنت"
+                )
+            }
+        }
+
+    }
+
+    @Composable
+    fun CustomCircularProgressIndicator(
+        modifier: Modifier = Modifier,
+        initialValue: Int,
+        primaryColor: Color,
+        secondaryColor: Color,
+        minValue: Int = 0,
+        maxValue: Int = 100,
+        circleRadius: Float,
+        onPositionChange: (Int) -> Unit
+    ) {
+        var circleCenter by remember {
+            mutableStateOf(Offset.Zero)
+        }
+
+        var positionValue by remember {
+            mutableStateOf(initialValue)
+        }
+
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = modifier
+            ) {
+                Canvas(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    val width = size.width
+                    val height = size.height
+                    val circleThickness = width / 20
+                    circleCenter = Offset(x = width / 2f, y = height / 2f)
+
+                    drawCircle(
+                        color = Color.White,
+                        radius = circleRadius,
+                        center = circleCenter
+                    )
+
+
+                    drawCircle(
+                        style = Stroke(
+                            width = circleThickness
+                        ),
+                        color = secondaryColor,
+                        radius = circleRadius,
+                        center = circleCenter
+                    )
+
+                    drawArc(
+                        color = primaryColor,
+                        startAngle = -90f,
+                        sweepAngle = 90f,/*(360f / maxValue) * positionValue.toFloat(),*/
+                        style = Stroke(
+                            width = circleThickness,
+                            cap = StrokeCap.Round
+                        ),
+                        useCenter = false,
+                        size = Size(
+                            width = circleRadius * 2f,
+                            height = circleRadius * 2f
+                        ),
+                        topLeft = Offset(
+                            (width - circleRadius * 2f) / 2f,
+                            (height - circleRadius * 2f) / 2f
+                        )
+
+                    )
+                }
+
+                CompositionLocalProvider(LocalLayoutDirection provides androidx.compose.ui.unit.LayoutDirection.Rtl) {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        textAlign = TextAlign.Center,
+                        text = "44.5 مگ",
+                        fontSize = (10.sp),
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+            }
+            Card(
+                shape = RoundedCornerShape(10.dp),
+            ) {
+                Text(
+                    modifier = Modifier
+                        .background(Yellow)
+                        .padding(horizontal = 6.dp, vertical = 6.dp),
                     fontSize = (10.sp),
                     fontWeight = FontWeight.Bold,
                     text = "خرید بسته اینترنت"
@@ -736,20 +840,10 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
-    //    @Preview
+    @Preview(showBackground = true)
     @Composable
-    fun Test() {
-        Canvas(modifier = Modifier.size(100.dp)) {
-            val canvasWidth = size.width
-            val canvasHeight = size.height
-            drawCircle(
-                color = Color(0xff0f9d58),
-                center = Offset(x = canvasWidth / 2, y = canvasHeight / 3),
-                radius = size.minDimension / 3,
-                style = Stroke(10F)
-            )
-        }
+    fun Preview() {
+
     }
 }
 
