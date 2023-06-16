@@ -14,9 +14,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composetest.components.*
+import com.example.composetest.model.Product
 import com.example.composetest.screen.HotScreen.TabScreen
 import com.example.composetest.ui.theme.*
+import com.example.composetest.viewModel.HomeViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,11 +144,46 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
+                    GetSuperMarketAmazingProducts()
                 }
             }
         }
     }
 
+
+    @Composable
+    fun GetSuperMarketAmazingProducts(
+        viewModel: HomeViewModel = hiltViewModel()
+    ) {
+        val product by viewModel.superMarketProduct.collectAsState()
+
+        var superMarketProductList by remember {
+            mutableStateOf<List<Product>>(emptyList())
+        }
+        superMarketProductList = product.data ?: emptyList()
+
+        //create your compose ui and use superMarketProductList:
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+
+        }
+
+
+
+
+
+
+        LaunchedEffect(true) {
+            viewModel.getSuperMarketAmazingProducts()
+        }
+    }
+
+    private suspend fun refreshDataFromServer(viewModel: HomeViewModel) {
+        viewModel.getSuperMarketAmazingProducts()
+    }
 
     @Preview(showBackground = true)
     @Composable
