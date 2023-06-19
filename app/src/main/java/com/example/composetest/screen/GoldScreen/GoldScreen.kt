@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.composetest.components.RoundedIconBox
@@ -48,7 +49,7 @@ fun GetSuperMarketAmazingProducts(
         horizontalArrangement = Arrangement.SpaceAround,
         maxItemsInEachRow = 4,
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
     ) {
         for (item in superMarketProductList){
             RoundedIconBox(title = item.discountPercent.toString() + "%", image = rememberAsyncImagePainter(item.image))

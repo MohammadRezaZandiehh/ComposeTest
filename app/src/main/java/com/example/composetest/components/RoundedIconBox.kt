@@ -25,7 +25,8 @@ fun RoundedIconBox(
 ) {
     Column(
         modifier = Modifier
-            .width(80.dp),
+            .width(80.dp)
+            .padding(top = 8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -41,7 +42,7 @@ fun RoundedIconBox(
             )
         }
 
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
 
         Text(
