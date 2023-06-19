@@ -1,8 +1,8 @@
 package com.example.composetest.screen.GoldScreen
 
 import android.util.Log
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.*
@@ -19,6 +19,7 @@ fun GoldScreen() {
     GetSuperMarketAmazingProducts()
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun GetSuperMarketAmazingProducts(
     viewModel: HomeViewModel = hiltViewModel()
@@ -38,14 +39,14 @@ fun GetSuperMarketAmazingProducts(
     }
 
     //create your compose ui and use superMarketProductList:
-    Column(
+    FlowRow(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        maxItemsInEachRow = 4,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
-        LazyRow() {
-            items(superMarketProductList) { item ->
-                RoundedIconBox(title = item.name, image = rememberAsyncImagePainter(item.image))
-            }
+        for (item in superMarketProductList){
+            RoundedIconBox(title = item.name, image = rememberAsyncImagePainter(item.image))
         }
     }
 }
