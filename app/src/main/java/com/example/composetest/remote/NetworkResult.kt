@@ -1,7 +1,7 @@
 package com.example.composetest.remote
 
 sealed class NetworkResult<T>(
-    val message: String? = null,
+    val message: Loading<Any> = null,
     val data: T? = null
 ) {
     class Success<T>(message: String, data: T) : NetworkResult<T>(message, data)

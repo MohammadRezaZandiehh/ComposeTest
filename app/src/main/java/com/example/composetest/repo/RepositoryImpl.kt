@@ -4,6 +4,7 @@ import com.example.composetest.model.Product
 import com.example.composetest.remote.BaseApiResponse
 import com.example.composetest.remote.HomeApiInterface
 import com.example.composetest.remote.NetworkResult
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(

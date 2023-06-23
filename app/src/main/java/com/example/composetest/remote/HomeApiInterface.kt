@@ -2,6 +2,7 @@ package com.example.composetest.remote
 
 import com.example.composetest.model.Product
 import com.example.composetest.model.ResponseResult
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.GET
 

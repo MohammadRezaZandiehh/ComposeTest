@@ -32,14 +32,14 @@ fun GetSuperMarketAmazingProducts(
     val product by viewModel.superMarketProduct.collectAsState()
     var superMarketProductList by remember { mutableStateOf<List<Product>>(emptyList()) }
 
-    val filterProduct = product.data?.filter {
+    /*val filterProduct = product.data?.filter {
         it.discountPercent <= 10
-    }/*?.map{
+    }*//*?.map{
 
     }*/
 
     when (product) {
-        is NetworkResult.Success -> superMarketProductList = filterProduct ?: emptyList()
+        is NetworkResult.Success -> superMarketProductList = product.data ?: emptyList()
         is NetworkResult.Error -> Log.e("3636", "Top Slider error : ${product.message}")
         is NetworkResult.Loading -> {}
     }
