@@ -7,8 +7,7 @@ import com.example.composetest.remote.NetworkResult
 import com.example.composetest.repo.Repository
 import com.example.composetest.repo.RepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +22,14 @@ class HomeViewModel @Inject constructor(private val repository: RepositoryImpl) 
     suspend fun getSuperMarketAmazingProducts() {
         viewModelScope.launch {
             launch {
-                _superMarketProduct.emit(repository.getSuperMarketAmazingProducts())
+                repository.getSuperMarketAmazingProducts().let { discountProducts ->
+                    discountProducts.data?.asFlow()?.filter {
+                        it.discountPercent <= 10
+                    }?.toList().let {
+                        _superMarketProduct.emit(discountProducts)
+                        _superMarketProduct.value.data = it
+                    }
+                }
             }
         }
     }
