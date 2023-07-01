@@ -1,5 +1,6 @@
 package com.example.composetest.screen.HotScreen
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,9 +23,8 @@ import com.example.composetest.ui.theme.DarkYellow
 import com.example.composetest.R
 
 
-
 @Composable
-fun TabScreen() {
+fun TabScreen(context: Context) {
     var tabIndex by remember { mutableStateOf(2) }
     val tabs = listOf("\uD83D\uDCB0مالی", "\uD83E\uDD47طلایی", "\uD83D\uDD25داغ")
 
@@ -65,7 +65,7 @@ fun TabScreen() {
         }
 
         when (tabIndex) {
-            0 -> FinanceScreen()
+            0 -> FinanceScreen(context)
             1 -> GoldScreen()
             2 -> HotScreen()
         }

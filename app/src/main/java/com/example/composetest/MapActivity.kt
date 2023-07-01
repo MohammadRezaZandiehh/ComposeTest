@@ -65,13 +65,13 @@ class MapActivity : AppCompatActivity() {
                 ) {
                     FloatingActionButton(
                         onClick = {
-                            /*if (!getPermission(ctx)) {
+                            if (!getOSMPermission()) {
                                 Toast.makeText(
                                     this@MapActivity,
-                                    "permission error",
+                                    "Permission was not allowed",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                            }*/
+                            }
                             getOSMPermission()
                             getCurrentLocation()
                         }) {
@@ -85,7 +85,7 @@ class MapActivity : AppCompatActivity() {
 
     // on below line we are creating a variable
     // for dexter and initializing it.
-    private fun getPermission(context: Context): Boolean {
+    private fun dexterPermission(context: Context): Boolean {
         var isPermissionGranted = false
         val dexter = Dexter.withContext(context)
             .withPermissions(
@@ -144,21 +144,24 @@ class MapActivity : AppCompatActivity() {
         return isPermissionGranted
     }
 
-    private fun getOSMPermission(){
+    private fun getOSMPermission(): Boolean {
+        var isPermissionGranted2 = false
+
         // Request Location permission
         if (ContextCompat.checkSelfPermission(
                 this,
-                //Manifest.permission.ACCESS_FINE_LOCATION
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
 
             ) == PERMISSION_GRANTED
         ) {
+            isPermissionGranted2 = true
             Toast.makeText(
                 this@MapActivity,
                 "Location Permission GRANTED",
                 Toast.LENGTH_SHORT
             ).show()
         } else {
+            isPermissionGranted2 = false
             Toast.makeText(
                 this@MapActivity,
                 "Location Permission DENIED",
@@ -171,6 +174,7 @@ class MapActivity : AppCompatActivity() {
                 1
             )
         }
+        return isPermissionGranted2
     }
 
 
@@ -192,19 +196,14 @@ class MapActivity : AppCompatActivity() {
             runOnUiThread {
                 mapController.animateTo(myLocationOverlay.myLocation)
                 mapController.setZoom(18.0)
+                Toast.makeText(this, "${myLocationOverlay.myLocation}", Toast.LENGTH_SHORT).show()
+                Log.i("mapBoxLog", "${myLocationOverlay.myLocation}")
             }
         }
         map.overlays.add(myLocationOverlay)
 
         // Set user agent
-        getInstance().userAgentValue = "RossMaps"
-//
-//        Toast.makeText(this, "${myLocationOverlay.myLocation.latitude}", Toast.LENGTH_SHORT).show()
-//        Toast.makeText(this, "${myLocationOverlay.myLocation.longitude}", Toast.LENGTH_SHORT).show()
-        Toast.makeText(this, "${myLocationOverlay.myLocation}", Toast.LENGTH_SHORT).show()
-
-        Log.i("mapBoxLog", "${myLocationOverlay.myLocation}")
-        Log.i("mapBoxLog", "getCurrentLocation: Create done")
+//        getInstance().userAgentValue = "RossMaps"
     }
 
     override fun onResume() {
