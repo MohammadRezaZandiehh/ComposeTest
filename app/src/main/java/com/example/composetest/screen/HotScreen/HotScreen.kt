@@ -6,21 +6,26 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
+import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.composetest.components.RoundedIconBox
 import com.example.composetest.screen.FinanceScreen.FinanceScreen
 import com.example.composetest.screen.GoldScreen.GoldScreen
 import com.example.composetest.ui.theme.DarkYellow
 import com.example.composetest.R
+import com.example.composetest.screen.HotScreen.CounterHelper.processInput
 
 
 @Composable
@@ -80,8 +85,8 @@ fun HotScreen() {
         modifier = Modifier
     ) {
         item {
-
-            Row(
+            CounterDisplay(modifier = Modifier)
+/*            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp, vertical = 16.dp),
@@ -161,7 +166,79 @@ fun HotScreen() {
                     title = "بامن",
                     image = painterResource(id = R.drawable.baman)
                 )
+            }*/
+        }
+    }
+}
+
+@Composable
+fun CounterDisplay(
+    modifier: Modifier
+) {
+    var editedText by remember { mutableStateOf("") }
+    var counterText by remember { mutableStateOf("Start copying") }
+
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            modifier = Modifier.testTag("Counter Display"),
+            text = counterText,
+            style = TextStyle(
+                fontSize = 20.sp,
+                color = Color.Black
+            )
+        )
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .testTag("Input"),
+            value = editedText,
+            onValueChange = {
+                editedText = it
+            },
+            label = {
+                Text("Input")
+            },
+            textStyle = TextStyle(
+                color = Color.Black,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Start,
+            ),
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            onClick = {
+                counterText = processInput(editedText)
             }
+        ) {
+            Text(
+                modifier = Modifier
+                    .testTag("Copy"),
+                text = "Copy",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    color = Color.Black
+                )
+            )
+        }
+    }
+}
+
+
+object CounterHelper {
+
+    fun processInput(editedText: String): String {
+        return try {
+            val counterValue = editedText.toInt()
+            "Counter = $counterValue"
+        } catch (e: NumberFormatException) {
+            "Invalid entry"
         }
     }
 }
