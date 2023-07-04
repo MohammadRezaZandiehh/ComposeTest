@@ -13,7 +13,6 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
 import androidx.compose.ui.Alignment.Companion.End
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -55,7 +54,7 @@ class MapActivity : AppCompatActivity() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
 
-                val ctx = LocalContext.current
+//                val ctx = LocalContext.current
                 Column(
                     modifier = Modifier
                         .padding(12.dp)
@@ -66,14 +65,8 @@ class MapActivity : AppCompatActivity() {
                     FloatingActionButton(
                         onClick = {
                             if (!getOSMPermission()) {
-                                Toast.makeText(
-                                    this@MapActivity,
-                                    "Permission was not allowed",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                getCurrentLocation()
                             }
-                            getOSMPermission()
-                            getCurrentLocation()
                         }) {
                         Text(text = "Click")
                     }
@@ -86,7 +79,7 @@ class MapActivity : AppCompatActivity() {
     // on below line we are creating a variable
     // for dexter and initializing it.
     private fun dexterPermission(context: Context): Boolean {
-        var isPermissionGranted = false
+        var isPermissionGranted2 = false
         val dexter = Dexter.withContext(context)
             .withPermissions(
 
@@ -107,7 +100,7 @@ class MapActivity : AppCompatActivity() {
                         if (report!!.areAllPermissionsGranted()) {
                             // if all the permissions are granted we are displaying
                             // a simple toast message.
-                            isPermissionGranted = true
+                            isPermissionGranted2 = true
                             Toast.makeText(context, "Permissions Granted..", Toast.LENGTH_SHORT)
                                 .show()
 
@@ -115,7 +108,7 @@ class MapActivity : AppCompatActivity() {
 
                             // if the permissions are not accepted we are displaying
                             // a toast message as permissions denied on below line.
-                            isPermissionGranted = false
+                            isPermissionGranted2 = false
                             Toast.makeText(context, "Permissions Denied..", Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -141,11 +134,11 @@ class MapActivity : AppCompatActivity() {
             }
         dexter.check()
 
-        return isPermissionGranted
+        return isPermissionGranted2
     }
 
     private fun getOSMPermission(): Boolean {
-        var isPermissionGranted2 = false
+        var isPermissionGranted = false
 
         // Request Location permission
         if (ContextCompat.checkSelfPermission(
@@ -154,17 +147,21 @@ class MapActivity : AppCompatActivity() {
 
             ) == PERMISSION_GRANTED
         ) {
-            isPermissionGranted2 = true
+            isPermissionGranted = true
             Toast.makeText(
                 this@MapActivity,
                 "Location Permission GRANTED",
                 Toast.LENGTH_SHORT
             ).show()
+
+            getCurrentLocation()
+
+
         } else {
-            isPermissionGranted2 = false
+            isPermissionGranted = false
             Toast.makeText(
                 this@MapActivity,
-                "Location Permission DENIED",
+                "Please let the GPS permission",
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -174,7 +171,7 @@ class MapActivity : AppCompatActivity() {
                 1
             )
         }
-        return isPermissionGranted2
+        return isPermissionGranted
     }
 
 
